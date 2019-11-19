@@ -13,5 +13,3 @@ while True:
     if not result:
         break
     print(result.decode())
-
-sockfd.close()
