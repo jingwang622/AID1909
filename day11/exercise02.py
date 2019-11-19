@@ -36,11 +36,17 @@ class DataBase:
             return "注册失败"
 
     def login(self,name,passwd):
-        sql = "select name,password from custom where name = '%s';" % name
-        self.cur.execute(sql)
+        sql = "select name,password from custom " \
+              "where name = %s and password = %s;"
+        self.cur.execute(sql,[name,passwd])
+        if self.cur.fetchone():
+            print("1111111")
+            return "登录成功"
+        else:
+            return "登录失败"
 
 
 if __name__ == '__main__':
     db = DataBase()
-    print(db.register("xiaoli",234))
-    # db.login()
+    # print(db.register("xiaoli",234))
+    print(db.login("xiaoming",123))
