@@ -21,16 +21,26 @@ class DataBase:
     def register(self,name,passwd):
         sql = "select name,password from custom where name = '%s';"%name
         self.cur.execute(sql)
-        if self.cur.fetchall():
-            pass
+        if not self.cur.fetchall():
+            try:
+                sql = 'insert into custom(name,password) ' \
+                      'values(%s,%s);'
+                self.cur.execute(sql,[name,passwd])
+                self.db.commit()
+                return "注册成功"
+            except:
+                self.db.rollback()
+                return "注册失败"
+
         else:
             return "注册失败"
 
     def login(self,name,passwd):
-        pass
+        sql = "select name,password from custom where name = '%s';" % name
+        self.cur.execute(sql)
 
 
 if __name__ == '__main__':
     db = DataBase()
-    # db.register()
+    print(db.register("xiaoli",234))
     # db.login()
