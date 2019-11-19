@@ -1,0 +1,7 @@
+f = open("test","w+")
+f.write("aaa")
+f.flush()
+print(f.tell())
+f.seek(2,0)
+data = f.read()
+print(data)

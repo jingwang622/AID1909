@@ -1,0 +1,2 @@
+class BankView:
+    pass
