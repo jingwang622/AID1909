@@ -88,16 +88,25 @@ def main():
         choice = input("输入一级操作命令：")
         if choice == "R":
             if uc.register():
-                choice = "L"
-                tuple_name = uc.login()
-                if tuple_name:
-                    uc.enter_another_view(uc,tuple_name)
+                print("1 重新登录    2 直接进入第二界面")
+                choose  = int(input("请输入选择操作："))
+                if choose == 1:
+                    choice = "L"
+                    tuple_name = uc.login()
+                    if tuple_name:
+                        uc.enter_another_view(uc,tuple_name)
+                elif choose == 2:
+                    uc.enter_another_view(uc, tuple_name)
+                else:
+                    print("请输入正确选择")
         elif choice == 'L':
             tuple_name = uc.login()
             if tuple_name:
                 uc.enter_another_view(uc,tuple_name)
+        elif choice == 'E':
+             uc.exit()
         else:
-            uc.exit()
+            print("请输入正确选择")
 
     sockfd.close()
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 from socket import *
 from threading import Thread
 from database import DataBase
+import sys
 class DictServer(Thread):
     def __init__(self,c):
         self.c = c
@@ -22,7 +23,7 @@ class DictServer(Thread):
     # 退出
     def exit(self):
         self.c.send("退出".encode())
-        os._exit(0)
+        sys.exit(2)
     # 查找单词
     def select_word(self,word,name):
         mean = self.db.select_mean_by_word(word)
