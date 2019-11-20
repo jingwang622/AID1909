@@ -7,7 +7,7 @@ sockfd.bind(("0.0.0.0",8888))
 
 # 收发消息
 while True:
-    data,addr = sockfd.recvfrom(5)
+    data,addr = sockfd.recvfrom(10)
     print("收到",data.decode())
     sockfd.sendto(b"123",addr)
 
