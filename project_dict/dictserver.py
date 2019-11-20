@@ -34,7 +34,6 @@ class DictServer(Thread):
     def select_history_record(self,name):
         print(name)
         history_record = self.db.select_history_record(name)
-        print(history_record)
         self.c.send(history_record.encode())
 
     # 注销

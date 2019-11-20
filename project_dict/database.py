@@ -1,5 +1,5 @@
 import pymysql
-import time
+from datetime import datetime
 import hashlib
 class DataBase:
     def __init__(self,host = 'localhost',port = 3306,user = 'root',password='123456',database ='dict',charset='utf8'):
@@ -66,10 +66,17 @@ class DataBase:
     def select_history_record(self,name):
         record_new = ""
         sql = "select name,word,querytime from historyrecord where name = '%s' order by querytime LIMIT 10" % name
-        print(sql)
         self.cur.execute(sql)
         record = self.cur.fetchall()
         if record:
-            return record
+            for item in record:
+                for i in item:
+                    if isinstance(i,datetime):
+                        i = datetime.strftime(i,'%Y-%m-%d %H:%M:%S')
+                    record_new += i+" "
+                record_new += "\n"
+            print(type(record_new))
+            return record_new
+
         else:
             return "没有记录"

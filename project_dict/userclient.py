@@ -54,9 +54,7 @@ class UserClient:
     def select_history_record(self,message):
             self.sockfd.send(message.encode())
             result = self.sockfd.recv(1024)
-            print(result.decode)
-    def log_out(self):
-        pass
+            print(result.decode())
     def enter_another_view(self,uc,tuple_name):
         while True:
             print("S 查单词\n"
