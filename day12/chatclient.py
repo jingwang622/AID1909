@@ -7,8 +7,9 @@ server_addr = ('127.0.0.1',8888)
 sockfd.connect(server_addr)
 # 发送消息
 while True:
-    data = input("输入操作：")
-    sockfd.send(data.encode())
+    name = input("输入姓名：")
+    message = "L " + name
+    sockfd.send(message.encode())
     result = sockfd.recv(1024)
     if not result:
         break

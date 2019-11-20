@@ -10,10 +10,8 @@ sockfd.listen(1024)
 name_dict = {}
 
 def login(name,addr):
-    for item in name_dict:
-        if name == item:
-            data = "登录失败"
-            break
+    if name in name_dict:
+        data = "登录失败"
     else:
         name_dict[name] = addr
         data = "登录成功"
@@ -27,7 +25,6 @@ while True:
         print("已经链接：...")
     except:
         c.close()
-        sockfd.close()
     while True:
         data = c.recv(1024)
         message_list = data.decode().split(" ")
@@ -36,6 +33,5 @@ while True:
             result = login(message_list[1],addr)
             print(result)
             c.send(result.encode())
-
-c.close()
+    c.close()
 sockfd.close()

@@ -1,0 +1,14 @@
+设计表：
+  用户：
+    用户id(int primary key)
+    用户名(name varchar(32))
+    密码(passwd varchar(32))
+  单词表：
+    id
+    单词(word varchar(32))
+    解释(explain text)
+  历史记录：
+    id
+    name
+    word
+    querytime date
