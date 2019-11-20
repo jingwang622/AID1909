@@ -1,15 +1,23 @@
 from socket import *
+import getpass
 class UserClient:
     def __init__(self, sockfd):
         self.sockfd = sockfd
     def register(self):
         while True:
             tuple_name = self.input_message()
+            repasswd = input("请输入确认密码：")
+            if tuple_name[1] != repasswd:
+                print("两次密码不一致")
+                continue
+            if (' ' in tuple_name[0]) or (' ' in tuple_name[1]):
+                print("姓名或者密码有空格")
+                continue
             message = "R " + tuple_name[0] + " " + tuple_name[1]
             self.sockfd.send(message.encode())
             result = self.sockfd.recv(1024)
             if result.decode() == "注册成功":
-                return True
+                return tuple_name
             else:
                 print(result.decode())
                 continue
@@ -21,7 +29,7 @@ class UserClient:
             self.sockfd.send(message.encode())
             result = self.sockfd.recv(1024)
             if result.decode() == "登录成功":
-                return True
+                return tuple_name
             else:
                 print(result.decode())
                 continue
@@ -34,27 +42,34 @@ class UserClient:
         name = input("请输入用户姓名：")
         passwd = input("请输入密码：")
         return (name,passwd)
-    def select_word(self,choice):
+    def select_word(self,tuple_name):
         while True:
-            self.sockfd.send(choice.encode())
-    def select_history_record(self):
+            word = input("请输入单词：")
+            if word == "##":
+                break
+            message = "S " + word + " "+ tuple_name[0]
+            self.sockfd.send(message.encode())
+            result = self.sockfd.recv(1024)
+            print(result.decode())
+    def select_history_record(self,message):
+            self.sockfd.send(message.encode())
+            result = self.sockfd.recv(1024)
+            print(result.decode())
+    def enter_another_view(self,uc,tuple_name):
         while True:
-            self.sockfd.send(choice.encode())
-    def log_out(self):
-        pass
-    def enter_another_view(self):
-        print("S 查单词\n"
-              "H 历史记录\n"
-              "Z 注销")
-        choice = input("请输入二级操作命令:")
-        if choice == "S":
-            self.select_word(choice)
-        elif choice == "H":
-            self.select_history_record(choice)
-        elif choice == "Z":
-            self.log_out(choice)
-        else:
-            print("请输入正确选项")
+            print("S 查单词\n"
+                  "H 历史记录\n"
+                  "Z 注销")
+            choice = input("请输入二级操作命令:")
+            if choice == "S":
+                self.select_word(tuple_name)
+            elif choice == "H":
+                message = "H " + tuple_name[0]
+                self.select_history_record(message)
+            elif choice == "Z":
+                return
+            else:
+                print("请输入正确选项")
 
 
 def main():
@@ -72,15 +87,27 @@ def main():
               "E exit")
         choice = input("输入一级操作命令：")
         if choice == "R":
-            if uc.register():
-                choice = "L"
-                if uc.login():
-                    uc.enter_another_view()
+            tuple_name = uc.register()
+            if tuple_name:
+                print("1 重新登录    2 直接进入第二界面")
+                choose  = int(input("请输入选择操作："))
+                if choose == 1:
+                    choice = "L"
+                    tuple_name = uc.login()
+                    if tuple_name:
+                        uc.enter_another_view(uc,tuple_name)
+                elif choose == 2:
+                    uc.enter_another_view(uc, tuple_name)
+                else:
+                    print("请输入正确选择")
         elif choice == 'L':
-            if uc.login():
-                uc.enter_another_view()
+            tuple_name = uc.login()
+            if tuple_name:
+                uc.enter_another_view(uc,tuple_name)
+        elif choice == 'E':
+             uc.exit()
         else:
-            uc.exit()
+            print("请输入正确选择")
 
     sockfd.close()
 if __name__ == '__main__':
