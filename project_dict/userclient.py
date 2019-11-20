@@ -17,7 +17,7 @@ class UserClient:
             self.sockfd.send(message.encode())
             result = self.sockfd.recv(1024)
             if result.decode() == "注册成功":
-                return True
+                return tuple_name
             else:
                 print(result.decode())
                 continue
@@ -87,7 +87,8 @@ def main():
               "E exit")
         choice = input("输入一级操作命令：")
         if choice == "R":
-            if uc.register():
+            tuple_name = uc.register()
+            if tuple_name:
                 print("1 重新登录    2 直接进入第二界面")
                 choose  = int(input("请输入选择操作："))
                 if choose == 1:

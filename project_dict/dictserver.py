@@ -77,15 +77,14 @@ def main():
     sockfd.bind(('127.0.0.1',8880))
     # 设置监听
     sockfd.listen(1024)
-    ds_list = []
     while True:
         print("等待链接....")
         try:
             c,addr= sockfd.accept()
             print("已经链接：...")
         except KeyboardInterrupt as e:
-            print(e)
             sockfd.close()
+            sys.exit("服务器退出")
         except Exception as e:
             print(e)
             continue
