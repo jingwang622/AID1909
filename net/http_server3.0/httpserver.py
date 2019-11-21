@@ -31,8 +31,11 @@ def connect_frame(env):
     # 接收返回的数据
     data = s.recv(1024*1024*10).decode()
     print(data)
-    if data:
-        return json.loads(data)
+    try:
+        if data:
+            return json.loads(data)  # 返回一个字典
+    except:
+        return
 # 封装http类
 class HttpServer:
     def __init__(self):
@@ -82,8 +85,11 @@ class HttpServer:
             return
         else:
             data = connect_frame(env)
-            self.response(connfd,data)
+            if data:
+                print("--------")
+                self.response(connfd,data)
     def response(self,connfd,data):
+        print(data)
         if data['status'] == '200':
             responseHeaders = "HTTP/1.1 200 OK \r\n"
             responseHeaders += "Content-Type:text/html\r\n"

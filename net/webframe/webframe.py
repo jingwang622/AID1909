@@ -34,7 +34,6 @@ class Application:
         if request['method'] == "GET":
             if request['info'] == '/' or request['info'][-5:] == '.html':
                 response = self.get_html(request['info'])
-
             else:
                 response = self.get_data(request['info'])
             response = json.dumps(response)
